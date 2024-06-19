@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+
+            margin: 20px;
+        }
+
+        .tipo-consulta {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+            .tipo-consulta input {
+            margin-right: 10px;
+        }
+
+        .tipo-consulta1 {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+            .tipo-consulta1 input {
+            margin-right: 10px;
+        }
+
+        .contenedor {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+
+        input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .exito {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 3px;
+            margin-top: 20px;
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            animation: fadeOut 3s linear 3s forwards;
+        }
+
+        .exito.show {
+            display: block;
+            animation: fadeIn 1s linear forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <h2>Contacto</h2>
+        <form id="formularioContacto">
+            <label for="nombre">Nombre *</label>
+            <input type="text" id="nombre" name="nombre" required>
+            <div class="error" id="nombreError"></div>
+
+            <label for="apellido">Apellido *</label>
+            <input type="text" id="apellido" name="apellido" required>
+            <div class="error" id="apellidoError"></div>
+
+            <label for="correo">Correo electrónico *</label>
+            <input type="email" id="correo" name="correo" required>
+            <div class="error" id="correoError"></div>
+
+            <label for="tipoConsulta">Tipo de consulta *</label>
+            <div class="tipo-consulta">
+            <label>
+                <input type="radio" name="tipo-consulta" id="consulta-general">
+                Consulta general
+            </label>
+            </div>
+
+            <div class="tipo-consulta1">
+            <label>
+                <input type="radio" name="tipo-consulta" id="solicitud-soporte">
+                Solicitud de soporte
+            </label>
+            </div>
+
+            <label for="mensaje">Mensaje *</label>
+            <textarea id="mensaje" required></textarea>
+
+            <input type="checkbox" id="consentimiento" required>
+            <label for="consentimiento">Acepto ser contactado por el equipo</label>
+
+            <button type="submit">Enviar</button>
+        </form> 
+
+        <div class="exito" id="mensajeExito"></div>
+    </div>
+
+    <script>
+        const formulario = document.getElementById('formularioContacto');
+        const nombreInput = document.getElementById('nombre');
+        const apellidoInput = document.getElementById('apellido');
+        const correoInput = document.getElementById('correo');
+        const nombreError = document.getElementById('nombreError');
+        const apellidoError = document.getElementById('apellidoError');
+        const correoError = document.getElementById('correoError');
+        const mensajeExito = document.getElementById('mensajeExito');
+
+        const consultaGeneralElement = document.querySelector('#consulta-general'); // Suponiendo que la opción tenga una clase "consulta-general"
+
+        consultaGeneralElement.addEventListener('click', () => {
+        // Aquí ejecutarías el código para seleccionar la opción
+        console.log('Consulta general seleccionada'); 
+        });
+
+        formulario.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            // Reset error messages
+            nombreError.textContent = '';
+            apellidoError.textContent = '';
+            correoError.textContent = '';
+
+            // Validate input fields
+            let isValid = true;
+
+            if (nombreInput.value.trim() === '') {
+                nombreError.textContent = 'Por favor, ingrese su nombre.';
+                nombreInput.focus();
+                isValid = false;
+            }
+
+            if (apellidoInput.value.trim() === '') {
+                apellidoError.textContent = 'Por favor, ingrese su apellido.';
+                apellidoInput.focus();
+                isValid = false;
+            }
+
+            if (correoInput.value.trim() === '' || !isValidEmail(correoInput.value)) {
+                correoError.textContent = 'Por favor, ingrese una dirección de correo electrónico válida.';
+                correoInput.focus();
+                isValid = false;
+            }
+
+            if (isValid) {
+                // Simulate form submission (replace with actual submission)
+                mensajeExito.textContent = 'Formulario enviado con éxito!';
+                mensajeExito.classList.add('show');
+                setTimeout(() => {
+                    mensajeExito.classList.remove('show');
+                }, 3000);
+                formulario.reset();
+            }
+        });
+
+        // Email validation function
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+    </script>
+</body>
+</html>
